@@ -1,5 +1,11 @@
-# Only parameters currently supported by the scaffold are listed here.
-# TODO(student): Design and implement camera parameters before adding them.
-/hikrobot_camera:
+hikrobot_camera:
   ros__parameters:
-    use_sim_time: false
+    image_topic: "/image_raw"
+
+    # Hikrobot camera controls
+    exposure_time: 5000.0   # us
+    gain: 10.0
+    frame_rate: 60.0        # FPS
+
+    # MV_CC_GetImageBuffer timeout
+    grab_timeout: 1000      # ms

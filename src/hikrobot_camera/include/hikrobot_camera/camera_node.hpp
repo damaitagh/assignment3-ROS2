@@ -1,20 +1,60 @@
-#ifndef HIKROBOT_CAMERA__CAMERA_NODE_HPP_
-#define HIKROBOT_CAMERA__CAMERA_NODE_HPP_
+#pragma once
 
-#include "rclcpp/rclcpp.hpp"
+#include <rcl_interfaces/msg/set_parameters_result.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/image.hpp>
+
+#include "MvCameraControl.h"
+
+#include <atomic>
+#include <string>
+#include <thread>
+#include <vector>
 
 namespace hikrobot_camera
 {
 
-class CameraNode : public rclcpp::Node
+class HikrobotCameraNode : public rclcpp::Node
 {
 public:
-  explicit CameraNode(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
+  HikrobotCameraNode();
+  ~HikrobotCameraNode() override;
 
-  // TODO(student): Design the interfaces and resource ownership required by
-  // your implementation. No SDK handles or camera operations are provided.
+private:
+  bool initCamera();
+  bool findCamera();
+  bool openCamera();
+  bool configureCamera();
+  void closeCamera();
+
+  void grabLoop();
+  bool grabImage();
+
+  bool reconnect();
+
+  rcl_interfaces::msg::SetParametersResult parameterCallback(
+    const std::vector<rclcpp::Parameter> & params);
+
+private:
+  void * handle_;
+  MV_CC_DEVICE_INFO_LIST device_list_{};
+
+  std::atomic<bool> running_;
+  std::thread grab_thread_;
+
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub_;
+
+  rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr
+    parameter_callback_handle_;
+
+  std::string image_topic_;
+
+  double exposure_time_;
+  double gain_;
+  double frame_rate_;
+  int grab_timeout_;
+
+  int fail_count_;
 };
 
 }  // namespace hikrobot_camera
-
-#endif  // HIKROBOT_CAMERA__CAMERA_NODE_HPP_

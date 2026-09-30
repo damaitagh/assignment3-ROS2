@@ -97,7 +97,8 @@ ros2 launch hikrobot_camera camera.launch.py params_file:=/absolute/path/to/came
 
 ## 在这里解释你的项目
 
-例如：
+本项目这样验收：
 
-1. 如何编译：
-2. 运行方式：
+首先用USB连接上相机
+
+然后进入该项目的终端，依次运行以下命令(注意路径，我的是 /桌面/assignment3-ROS2)

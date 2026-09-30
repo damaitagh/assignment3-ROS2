@@ -1,12 +1,18 @@
+#include "hikrobot_camera/camera_node.hpp"
+
 #include <memory>
 
-#include "hikrobot_camera/camera_node.hpp"
-#include "rclcpp/rclcpp.hpp"
-
-int main(int argc, char * argv[])
+int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<hikrobot_camera::CameraNode>());
+
+  auto node =
+    std::make_shared<
+      hikrobot_camera::HikrobotCameraNode>();
+
+  rclcpp::spin(node);
+
   rclcpp::shutdown();
+
   return 0;
 }
