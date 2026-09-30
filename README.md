@@ -101,4 +101,29 @@ ros2 launch hikrobot_camera camera.launch.py params_file:=/absolute/path/to/came
 
 首先用USB连接上相机
 
-然后进入该项目的终端，依次运行以下命令(注意路径，我的是 /桌面/assignment3-ROS2)
+然后进入该项目的终端，运行命令：
+rm -rf build install log                                            
+
+source /opt/ros/jazzy/setup.zsh             
+
+export LD_LIBRARY_PATH=/opt/MVS/bin:/opt/MVS/lib/64:$LD_LIBRARY_PATH
+
+colcon build \
+  --symlink-install \
+  --packages-select hikrobot_camera \
+  --cmake-clean-cache
+
+ros2 launch hikrobot_camera camera.launch.py
+
+新开一个终端，运行：ros2 topic hz /image_raw
+
+再新开一个，你可以：ros2 param set /hikrobot_camera exposure_time 7000.0 调整参数
+
+拔掉USB，会显示not connected，并且能够重联
+
+最后在Rviz2里，add image_raw 注意：一定要设置best effort！就能看到实时图像了
+
+
+
+
+
